@@ -1,0 +1,22 @@
+# Archivos generados por .NET
+**/bin/
+**/obj/
+
+# Archivos de usuario de Visual Studio
+*.user
+*.suo
+
+# Configuración local y secretos
+.env
+.env.*
+!.env.example
+secrets.json
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Archivos temporales y logs
+*.log
+*.tmp
