@@ -122,4 +122,13 @@ NovaHarvest utiliza dos servicios principales:
 6. Los recursos estáticos, como CSS e imágenes, se sirven desde la carpeta `wwwroot`.
 7. La respuesta vuelve a través de Nginx hasta el navegador.
 
+### ¿Por qué se utiliza esta arquitectura?
+
+Nginx actúa como reverse proxy y recibe todas las peticiones de los usuarios.
+Después las reenvía al backend ASP.NET Core, que utiliza Kestrel para generar
+las páginas HTML y servir los recursos estáticos.
+
+Esta separación permite que el backend no esté expuesto directamente al exterior
+y que Nginx sea el único punto de entrada a la aplicación.
+
 El único servicio que publica un puerto al exterior es `web`. El backend permanece accesible únicamente dentro de la red de Docker.
