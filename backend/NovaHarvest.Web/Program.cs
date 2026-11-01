@@ -128,5 +128,8 @@ app.MapGet("/status", () =>
     </html>
     """, "text/html; charset=utf-8");
 });
+// Allow HEAD requests for the status response headers
+app.MapMethods("/status", new[] { "HEAD" }, () =>
+    Results.Content("", "text/html; charset=utf-8"));
 
 app.Run();
