@@ -1,0 +1,26 @@
+@inject IWebHostEnvironment Env
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>@ViewData["Title"] - NovaWarehouse</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+
+<body>
+    <header>
+         <img src="/img/logo.png" class="logo" alt="Logo NovaHarvest">
+         <nav>
+            <a href="/">Inicio</a>
+            <a href="/about">Acerca de</a>
+            <a href="/status">Estado</a>
+        </nav>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <footer><p>NovaHarvest - IES Valle del Jerte - @DateTime.Now.Year - Entorno: @Env.EnvironmentName</p></footer>
+</body>
+
+</html>
