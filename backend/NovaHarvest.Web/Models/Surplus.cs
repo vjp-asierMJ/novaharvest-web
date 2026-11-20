@@ -1,4 +1,4 @@
-namespace NovaWarehouse.Web.Models;
+namespace NovaHarvest.Web.Models;
 
 public class Surplus(
     string product,
