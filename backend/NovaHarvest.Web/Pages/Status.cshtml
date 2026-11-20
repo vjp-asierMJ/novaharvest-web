@@ -1,5 +1,6 @@
 @page
-
+@*Importamos el modelo*@
+@model StatusModel
 @{
     ViewData["Title"] = "Estado del servidor";
 }
@@ -7,8 +8,10 @@
 
 <h1>Estado del servidor</h1>
 
-<p>Fecha y hora del servidor: @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")</p>
+<p>Fecha y hora del servidor: @Model.ServerTime.ToString("dd/MM/yyyy HH:mm:ss")</p>
 
-<p>Servidor: @Environment.MachineName</p>
+<p>Servidor: @Model.ServerName</p>
+
+<p>Visitas desde arranque: @Model.Visits</p>
 
 <p>Página generada por ASP.NET Core (Kestrel) con Razor Pages</p>
