@@ -1,0 +1,27 @@
+@page "/ticket"
+@model TicketModel
+
+@{
+    // Evita utilizar el diseño compartido del resto de páginas.
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Justificante de reserva</title>
+    <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+     <h1>Justificante de reserva</h1>
+
+    @* Mostramos los datos obtenidos del PageModel. *@
+    <p>Reserva: @Model.Reservation</p>
+    <p>Producto: @Model.Product</p>
+    <p>Kilos: @Model.Kg</p>
+    <p>Recogida: @Model.Pickup</p>
+    <p>Generado el: @Model.GeneratedAt.ToString("dd/MM/yyyy HH:mm")</p>
+</body>
+</html>
