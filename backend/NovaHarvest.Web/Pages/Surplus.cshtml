@@ -13,9 +13,9 @@
 
 <p>Productor: @Model.Surplus.Producer (@Model.Surplus.Village)</p>
 
-<p>Cosecha: @Model.Surplus.HarvestDate.ToString("d")</p>
+<p>Cosecha: @Model.Surplus.HarvestDate.ToString("dd/MM/yyyy")</p>
 
-<p>Consumir antes del: @Model.ConsumeBefore.ToString("d")</p>
+<p>Consumir antes del: @Model.ConsumeBefore.ToString("dd/MM/yyyy")</p>
 
 <p class="@(Model.IsUrgent ? "urgent" : null)">
     Días para consumirlo: @Model.DaysToConsume
