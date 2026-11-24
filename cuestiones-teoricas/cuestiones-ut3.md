@@ -114,3 +114,34 @@ Este comentario no aparece en el HTML que recibe el navegador.
 En el correo electrónico hay letras justo delante del arroba, por lo que Razor no lo interpreta como el comienzo de código. En cambio, en @novaharvest el arroba aparece al principio y Razor intenta interpretarla como una expresión de C#. Por eso utilizo @@ para mostrarla como un carácter normal.
 
 ![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-3-img14.png)
+
+# 4. Sintexis
+
+**Cambiar SurplusPrice por SurplusPrize**
+
+El problema ocurre en que en mi Surplus.cshtml.cs la propiedad se llama SurplusPrice, por lo que al intentar buscar "SurplusPrize" da error de compilación ya que no encuentra el nombre de la variable
+
+![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-4-img16.png)
+
+![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-4-img17.png)
+
+**Añadir @Model.Surplus.PricePerKg * 0.7m**
+
+Como esta explicado en el bloque 2 diapositiva 8, no da error ya que Razor separa los contenidos en 2 partes
+
+1. @Model.Surplus.PricePerKg - es decir lo que va detras del @, esto se interpreta como codigo C#
+
+2. *0.7m - Lo interpreta como texto normal, porque encuentra un espacio y termina la expresión implícita.
+
+
+![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-4-img18.png)
+
+
+![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-4-img19.png)
+
+
+**Solución**
+
+Para que la operación funcione hay que excribirla de maneria explícita:
+
+@(Model.Surplus.PricePerKg * 0.7m)
