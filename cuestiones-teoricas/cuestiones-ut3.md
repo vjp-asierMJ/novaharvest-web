@@ -232,6 +232,8 @@ En mi archivo Ticket.cshtml utilizo @page "/ticket". Esto cambia la URL que Razo
 
 ![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-6-img35.png)
 
+![alt text](/backend/NovaHarvest.Web/wwwroot/img/ut3-6-img60.png)
+
 
 # 7. Tipos y operadores. 
 
