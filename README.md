@@ -68,49 +68,43 @@ Sin Docker, utilizar la dirección local que muestra `dotnet run`, añadiendo la
 NovaHarvest utiliza dos servicios principales:
 
 - **web:** servidor Nginx que funciona como reverse proxy.
-- **backend:** aplicación ASP.NET Core 10 que utiliza Kestrel para generar las páginas.
+- **backend:** utiliza ASP.NET Core 10 y Kestrel para ejecutar la aplicación y gestionar las páginas mediante Razor Pages.
 
 ### Diagrama de arquitectura
 
-```text
-                 NAVEGADOR
-                     |
-                     |
+                 NOVAHARVEST
+                      |
+                  NAVEGADOR
+                      |
              http://localhost:8080
-                     |
-                     v
-          +----------------------+
-          |     WEB (NGINX)      |
-          |                      |
-          |     Puerto 80        |
-          |     Reverse Proxy    |
-          +----------------------+
-                     |
-                     |
-              backend:8080
-                     |
-                     v
-        +-------------------------+
-        |        BACKEND          |
-        |                         |
-        |    ASP.NET Core 10      |
-        |       Kestrel           |
-        |                         |
-        |     Puerto 8080         |
-        +-------------------------+
-                     |
-                     v
-             NOVAHARVEST
-                     |
-          +----------+----------+
-          |          |          |
-         Inicio    About      Status
-                     |
-                     v
-              wwwroot/
-              |       |
-             CSS    Logo
-```
+                      |
+                      v
+              +----------------+
+              |   WEB (NGINX)  |
+              |    Puerto 80   |
+              +----------------+
+                      |
+          proxy_pass http://backend:8080
+                      |
+                      v
+             +--------------------+
+             |      BACKEND       |
+             |   ASP.NET Core 10  |
+             |      Kestrel       |
+             +--------------------+
+                      |
+             +--------+---------+
+             |                  |
+             v                  v
+        Razor Pages           wwwroot
+             |                  |
+      +------+------+       +---+---+
+      |      |      |       |       |
+     Inicio About Status   CSS    Imágenes
+             |
+          Surplus
+             |
+           Ticket
 
 ### Recorrido de una petición
 
@@ -118,17 +112,35 @@ NovaHarvest utiliza dos servicios principales:
 2. Docker Compose dirige la petición al servicio `web`, que utiliza Nginx.
 3. Nginx recibe la petición y la reenvía al servicio `backend` mediante el puerto 8080.
 4. ASP.NET Core recibe la petición a través de Kestrel.
-5. La aplicación ejecuta la ruta correspondiente y genera la página HTML mediante código C#.
-6. Los recursos estáticos, como CSS e imágenes, se sirven desde la carpeta `wwwroot`.
-7. La respuesta vuelve a través de Nginx hasta el navegador.
+5. Razor Pages identifica la página correspondiente y genera el HTML.
+6. Los archivos estáticos, como CSS e imágenes, se sirven desde la carpeta wwwroot.
+7. La respuesta vuelve al navegador a través de Nginx.
 
-### ¿Por qué se utiliza esta arquitectura?
+De esta forma, el usuario solo accede directamente al servicio web.
 
-Nginx actúa como reverse proxy y recibe todas las peticiones de los usuarios.
-Después las reenvía al backend ASP.NET Core, que utiliza Kestrel para generar
-las páginas HTML y servir los recursos estáticos.
+## 3. Páginas
 
-Esta separación permite que el backend no esté expuesto directamente al exterior
-y que Nginx sea el único punto de entrada a la aplicación.
+En NovaHarvest utilizo Razor Pages para organizar las distintas páginas de la aplicación. Cada página tiene su propio archivo `.cshtml` y algunas tienen también un PageModel asociado, donde se preparan los datos y se realizan los cálculos que después se muestran.
 
-El único servicio que publica un puerto al exterior es `web`. El backend permanece accesible únicamente dentro de la red de Docker.
+### 3.1. Localización de las páginas
+
+| URL | Archivo `.cshtml` | PageModel |
+|---|---|---|
+| `/` | `Pages/Index.cshtml` | No tiene |
+| `/about` | `Pages/About.cshtml` | No tiene |
+| `/status` | `Pages/Status.cshtml` | `Pages/Status.cshtml.cs` (`StatusModel`) |
+| `/surplus` | `Pages/Surplus.cshtml` | `Pages/Surplus.cshtml.cs` (`SurplusModel`) |
+| `/ticket` | `Pages/Reservations/Ticket.cshtml` | `Pages/Reservations/Ticket.cshtml.cs` (`TicketModel`) |
+
+### 3.2. Otros archivos que intervienen en las páginas
+
+- **`Models/Surplus.cs`:** contiene la clase `Surplus`, que representa los datos del excedente utilizados por `SurplusModel`.
+- **`Models/SiteStats.cs`:** contiene el contador de visitas compartido que utiliza `StatusModel`.
+
+### 3.3. Ficheros especiales de Pages
+
+- **`Pages/_ViewImports.cshtml`:** contiene las directivas comunes que utilizan las páginas, como `@using` y `@namespace`.
+- **`Pages/_ViewStart.cshtml`:** se ejecuta antes de cada página y establece el layout que se utiliza por defecto.
+- **`Pages/Shared/_Layout.cshtml`:** contiene la estructura común de las páginas, como la cabecera, el menú y el pie. Mediante `@RenderBody()` indica dónde aparece el contenido de cada página.
+
+La página `/ticket` no utiliza el layout compartido porque tiene su propio documento HTML completo.
