@@ -109,6 +109,10 @@ footer p {
     font-size: 14px;
 }
 
+.urgent {
+    color:#60aa4b;
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     header {
